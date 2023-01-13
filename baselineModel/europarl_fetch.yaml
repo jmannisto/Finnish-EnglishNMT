@@ -1,0 +1,61 @@
+# Common definitions
+common:
+  # The files will go here
+  output_directory: work
+  # Language codes for the source and target languages
+  constants:
+    source: fi
+    target: en
+
+# Data processing steps
+steps:
+
+# Download data from OPUS
+- type: opus_read
+  parameters:
+    corpus_name: Europarl
+    source_language: !var source
+    target_language: !var target
+    release: latest
+    preprocessing: raw
+    src_output: !varstr "raw.{source}.gz"
+    tgt_output: !varstr "raw.{target}.gz"
+
+# Preprocess segments
+- type: preprocess
+  parameters:
+    inputs:
+    - !varstr "raw.{source}.gz"
+    - !varstr "raw.{target}.gz"
+    outputs:
+    - !varstr "preprocessed.{source}.gz"
+    - !varstr "preprocessed.{target}.gz"
+    preprocessors:
+    - WhitespaceNormalizer: {}  # Replaces sequences of whitespace characters with a single space.
+
+# Filtered (cleaned) segments
+- type: filter
+  parameters:
+    inputs:
+    - !varstr "preprocessed.{source}.gz"
+    - !varstr "preprocessed.{target}.gz"
+    outputs:
+    - !varstr "filtered.{source}.gz"
+    - !varstr "filtered.{target}.gz"
+    filters:
+    - LengthFilter:
+        unit: word
+        min_length: 2
+        max_length: 250
+
+# Sample a subset for manual checking
+- type: subset
+  parameters:
+    inputs:
+    - !varstr "filtered.{source}.gz"
+    - !varstr "filtered.{target}.gz"
+    outputs:
+    - !varstr "filtered-sample.{source}.txt"
+    - !varstr "filtered-sample.{target}.txt"
+    size: 100
+    seed: 2021
