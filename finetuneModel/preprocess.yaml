@@ -1,0 +1,32 @@
+# Common definitions
+common:
+  # The files will go here
+  output_directory: preprocessed
+  # Language codes for the source and target languages
+  constants:
+    source: fi
+    target: en
+
+# Data processing steps
+steps:
+
+# Filtered (cleaned) segments
+- type: filter
+  parameters:
+    inputs:
+    - fiTrain.fi
+    - fiTrain.en
+    outputs:
+    - !varstr "filtered.{source}.gz"
+    - !varstr "filtered.{target}.gz"
+    filters: &myfilters
+    - LengthFilter:
+        unit: word
+        min_length: 3
+        max_length: 100
+    - LengthRatioFilter:
+        unit: word
+        threshold: 3
+    - AlphabetRatioFilter:
+       threshold: 0.75
+       exclude_whitespace: false
