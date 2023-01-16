@@ -1,0 +1,65 @@
+save_data: ./example
+
+# Corpus opts:
+data:
+    finnish:
+        path_src: ./data/finnish/train.bpe.fi
+        path_tgt: ./data/finnish/train.bpe.en
+        weight: 1
+    estonian:
+        path_src: ./data/estonian/train.bpe.et
+        path_tgt: ./data/estonian/train.bpe.en
+        weight: 3
+    valid:
+        path_src: ./work/combo.val.bpe.et_fi
+        path_tgt: ./work/combo.val.bpe.en
+
+
+## Where the vocab(s) will be written
+share_vocab: TRUE
+src_vocab:  ./vocab.multi.src
+#tgt_vocab: ./vocab.fi.tgt
+
+# General opts
+save_model: ./model-multi
+save_checkpoint_steps: 20000 #need to change
+valid_steps: 20000 #need to change
+train_steps: 100000 #need to change
+early_stopping: 4 #change?
+early_stopping_criteria: ppl
+
+
+# Model
+encoder_type: transformer
+decoder_type: transformer
+position_encoding: true
+enc_layers: 6
+dec_layers: 6
+heads: 8
+rnn_size: 512
+word_vec_size: 512
+transformer_ff: 2048
+dropout: 0.1
+attention_dropout: 0.1
+
+# Optimization
+model_dtype: fp32
+optim: adam
+learning_rate: 2
+warmup_steps: 8000
+decay_method: noam
+adam_beta2: 0.998
+max_grad_norm: 0
+label_smoothing: 0.1
+param_init: 0
+param_init_glorot: true
+normalization: tokens
+
+# Batching
+world_size: 1
+gpu_ranks: [0]
+batch_type: tokens
+batch_size: 4096
+valid_batch_size: 4096
+max_generator_batches: 2
+accum_count: 8
