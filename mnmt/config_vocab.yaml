@@ -1,0 +1,24 @@
+save_data: ./example
+
+# Corpus opts:
+data:
+    finnish:
+        path_src: ./data/finnish/train.bpe.fi
+        path_tgt: ./data/finnish/train.bpe.en
+        weight: 1
+    estonian:
+        path_src: ./data/estonian/train.bpe.et
+        path_tgt: ./data/estonian/train.bpe.en
+        weight: 3
+    valid:
+        path_src: ./work/combo.val.bpe.et_fi
+        path_tgt: ./work/combo.val.bpe.en
+
+
+## Where the vocab(s) will be written
+share_vocab: TRUE
+src_vocab: ./vocab.multi.src
+# Prevent overwriting existing files in the folder
+overwrite: False
+
+
